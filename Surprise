@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Love Message Interaction</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+  body {
+    margin:0;
+    padding:0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #654ea3, #eaafc8);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 48px 24px;
+    box-sizing: border-box;
+  }
+  .container {
+    max-width: 600px;
+    width: 100%;
+    background: rgba(0,0,0,0.25);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  h1 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin: 0;
+    text-align: center;
+    user-select: none;
+  }
+  .buttons, .followup-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  button {
+    background: rgba(255 255 255 / 0.15);
+    border: 2px solid #fff;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition:
+      background-color 0.3s ease,
+      transform 0.2s ease,
+      box-shadow 0.3s ease;
+    min-width: 140px;
+  }
+  button:hover, button:focus {
+    background: #fff;
+    color: #654ea3;
+    outline: none;
+    box-shadow: 0 0 10px #fff;
+    transform: translateY(-3px) scale(1.05);
+  }
+  .message, .hearts-container, .interesting-question, .ask-message {
+    text-align: center;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    user-select: none;
+  }
+  .hearts-container {
+    position: relative;
+    margin-top: 16px;
+    min-height: 80px;
+  }
+  /* hearts animation */
+  .heart {
+    position: absolute;
+    bottom: 0;
+    width: 24px;
+    height: 24px;
+    background: radial-gradient(circle at center, #ff4d6d 0%, #b0223e 100%);
+    transform-origin: center;
+    clip-path:
+      polygon(50% 0%, 61% 10%, 70% 20%, 80% 30%, 90% 40%, 95% 50%, 100% 60%, 95% 70%, 85% 80%, 70% 95%, 50% 100%, 30% 95%, 15% 80%, 5% 70%, 0% 60%, 5% 50%, 10% 40%, 20% 30%, 30% 20%, 39% 10%);
+    opacity: 0.8;
+    animation: floatUp 3s ease-in forwards;
+  }
+  @keyframes floatUp {
+    0% {
+      transform: translateY(0) scale(1) rotate(0deg);
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateY(-120px) scale(1.5) rotate(20deg);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+<body>
+  <main class="container" role="main" aria-live="polite" aria-atomic="true">
+    <h1 id="main-text">I love you Jaana</h1>
+    <div class="buttons" role="group" aria-label="Love options">
+      <button id="btn-love-too" type="button">I Love You too janeman</button>
+      <button id="btn-u2" type="button">U2</button>
+    </div>
+
+    <section id="response-area" tabindex="-1" aria-live="polite"></section>
+  </main>
+
+<script>
+  const mainText = document.getElementById('main-text');
+  const btnLoveToo = document.getElementById('btn-love-too');
+  const btnU2 = document.getElementById('btn-u2');
+  const responseArea = document.getElementById('response-area');
+
+  // Clear response area helper
+  function clearResponse() {
+    responseArea.innerHTML = '';
+  }
+
+  // Create hearts animation container with floating hearts
+  function createHeartsAnimation() {
+    const heartsContainer = document.createElement('div');
+    heartsContainer.className = 'hearts-container';
+    for (let i = 0; i < 12; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      // random horizontal position
+      heart.style.left = (Math.random() * 100) + '%';
+      // random animation delay
+      heart.style.animationDelay = (Math.random() * 3) + 's';
+      // random animation duration
+      heart.style.animationDuration = 3 + Math.random() * 2 + 's';
+      heartsContainer.appendChild(heart);
+    }
+    return heartsContainer;
+  }
+
+  // Handler for U2 button
+  btnU2.addEventListener('click', () => {
+    clearResponse();
+    mainText.textContent = 'jaana I Love You infinity ♾️';
+    // Hide buttons when showing this
+    hideButtons();
+  });
+
+  // Handler for "I Love You too janeman" button
+  btnLoveToo.addEventListener('click', () => {
+    clearResponse();
+    mainText.textContent = 'I love you Jaana';
+
+    // Show hearts and message with follow-up question options
+    const hearts = createHeartsAnimation();
+    const message = document.createElement('p');
+    message.className = 'message';
+    message.textContent =
+      'Jaana You know I love you Very Much, sometimes I disturb you by my clingy things 🤧 but I care about you Jaana, please ignore that just focus on My Love, please don\'t block me every time rather talk to me discuss with me we love each other.';
+
+    // Append hearts and message
+    responseArea.appendChild(hearts);
+    responseArea.appendChild(message);
+
+    // Next line text with question
+    const questionText = document.createElement('p');
+    questionText.textContent = 'One interesting question for you';
+    questionText.style.fontWeight = '700';
+    questionText.style.marginTop = '32px';
+    responseArea.appendChild(questionText);
+
+    // Follow up buttons container
+    const followUpButtons = document.createElement('div');
+    followUpButtons.className = 'followup-buttons';
+    followUpButtons.setAttribute('role', 'group');
+    followUpButtons.setAttribute('aria-label', 'Follow up questions');
+
+    const btnInteresting = document.createElement('button');
+    btnInteresting.type = 'button';
+    btnInteresting.textContent = 'hmm interesting question 🤔';
+
+    const btnAsk = document.createElement('button');
+    btnAsk.type = 'button';
+    btnAsk.textContent = 'ask 🥰';
+
+    followUpButtons.appendChild(btnInteresting);
+    followUpButtons.appendChild(btnAsk);
+    responseArea.appendChild(followUpButtons);
+
+    // Show buttons if hidden
+    showButtons();
+
+    // Event listeners for follow-up buttons
+    btnInteresting.addEventListener('click', () => {
+      clearResponse();
+      mainText.textContent = 'I love you Jaana';
+      const question = document.createElement('p');
+      question.className = 'interesting-question';
+      question.textContent = 'What If after our marriage I disturb you in Love what would be your reaction 👀';
+      responseArea.appendChild(question);
+    });
+
+    btnAsk.addEventListener('click', () => {
+      clearResponse();
+      mainText.textContent = 'I love you Jaana';
+      const askMessage = document.createElement('p');
+      askMessage.className = 'ask-message';
+      askMessage.textContent = 'please send me your pics voice notes 😚❤️';
+      responseArea.appendChild(askMessage);
+    });
+  });
+
+  // Hide the initial two buttons (used in U2 click)
+  function hideButtons() {
+    btnLoveToo.style.display = 'none';
+    btnU2.style.display = 'none';
+  }
+  // Show the initial two buttons (used in Love too click)
+  function showButtons() {
+    btnLoveToo.style.display = 'inline-block';
+    btnU2.style.display = 'inline-block';
+  }
+</script>
+</body>
+</html>
+
